@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Women's Health Cost Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+        #calendarResult {
+            margin-top: 20px;
+            font-size: 16px;
+            text-align: center;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Women's Health Cost Predictor</h1>
+        
+        <h2>Estimate Costs</h2>
+        <label for="serviceType">Select Health Service:</label>
+        <select id="serviceType">
+            <option value="ultrasound">Ultrasound</option>
+            <option value="breast_exam">Breast Self-Exam Reminder</option>
+            <option value="standard_procedure">Standard Procedure</option>
+        </select>
+
+        <label for="country">Select Your Country:</label>
+        <select id="country">
+            <option value="usa">USA</option>
+            <option value="uk">UK</option>
+            <option value="canada">Canada</option>
+            <option value="india">India</option>
+            <option value="australia">Australia</option>
+        </select>
+
+        <label for="healthStatus">Health Status:</label>
+        <select id="healthStatus">
+            <option value="normal">Normal</option>
+            <option value="high_risk">High Risk</option>
+        </select>
+
+        <button id="calculateBtn">Estimate Cost</button>
+        <div id="result"></div>
+
+        <h2>Set Reminder</h2>
+        <button id="calendarBtn">Set Monthly Reminder</button>
+        <div id="calendarResult"></div>
+    </div>
+
+    <script>
+        const costEstimates = {
+            'ultrasound': {
+                'usa': { normal: 200, high_risk: 300 },
+                'uk': { normal: 150, high_risk: 250 },
+                'canada': { normal: 175, high_risk: 275 },
+                'india': { normal: 100, high_risk: 150 },
+                'australia': { normal: 250, high_risk: 350 }
+            },
+            'standard_procedure': {
+                'usa': { normal: 1000, high_risk: 1500 },
+                'uk': { normal: 700, high_risk: 1200 },
+                'canada': { normal: 800, high_risk: 1300 },
+                'india': { normal: 400, high_risk: 600 },
+                'australia': { normal: 900, high_risk: 1400 }
+            },
+            'breast_exam': {
+                'normal': "Monthly reminder set for breast self-examination.",
+                'high_risk': "Monthly reminder set for breast self-examination with additional checks."
+            }
+        };
+
+        document.getElementById('calculateBtn').addEventListener('click', function() {
+            const serviceType = document.getElementById('serviceType').value;
+            const country = document.getElementById('country').value;
+            const healthStatus = document.getElementById('healthStatus').value;
+
+            if (serviceType === 'breast_exam') {
+                const reminderMessage = costEstimates[serviceType][healthStatus];
+                document.getElementById('result').innerText = reminderMessage;
+            } else {
+                const estimatedCost = costEstimates[serviceType][country][healthStatus];
+                document.getElementById('result').innerText = `Estimated cost: $${estimatedCost}`;
+            }
+        });
+
+        document.getElementById('calendarBtn').addEventListener('click', function() {
+            const today = new Date();
+            const reminderDate = new Date(today.setMonth(today.getMonth() + 1));
+            document.getElementById('calendarResult').innerText = `Reminder set for: ${reminderDate.toDateString()}`;
+        });
+    </script>
+</body>
+</html>
